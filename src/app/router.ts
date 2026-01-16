@@ -1,3 +1,4 @@
+import { isPage } from "../types/page.type.js";
 import App from "./app.js";
 
 export class Router {
@@ -13,7 +14,7 @@ export class Router {
 
       const route = target.dataset.route;
 
-      if (route !== undefined) {
+      if (route !== undefined && isPage(route)) {
         this.app.navigate(route);
       }
     });

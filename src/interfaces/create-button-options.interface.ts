@@ -1,5 +1,5 @@
 export interface CreateButtonOptions {
   classes?: string[];
-  text: string;
+  text?: string;
   parent?: HTMLElement;
 }

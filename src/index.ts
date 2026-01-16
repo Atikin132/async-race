@@ -5,6 +5,7 @@ import { Winners } from "./pages/winners/winners.js";
 
 const app = new App(document.body);
 
+app.init("garage");
 app.register("garage", new Garage());
 app.register("winners", new Winners());
 
