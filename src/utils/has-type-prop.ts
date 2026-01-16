@@ -9,3 +9,9 @@ export function hasNumberProp(obj: object, key: string): boolean {
     key in obj && typeof (obj as Record<string, unknown>)[key] === "number"
   );
 }
+
+export function hasBooleanProp(obj: object, key: string): boolean {
+  return (
+    key in obj && typeof (obj as Record<string, unknown>)[key] === "boolean"
+  );
+}
