@@ -115,7 +115,6 @@
   background-repeat: no-repeat;
   background-position: center;
   object-fit: contain;
-  cursor: pointer;
   background-color: transparent;
   padding: 2px;
   background-image: url("../../assets/svg/finish-flag.svg");
