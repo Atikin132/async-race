@@ -6,7 +6,7 @@ export abstract class BasePage implements Screen {
   abstract create(parent: HTMLElement): void;
 
   show(): void {
-    this.container.style.display = "block";
+    this.container.style.display = "flex";
   }
 
   hide(): void {
