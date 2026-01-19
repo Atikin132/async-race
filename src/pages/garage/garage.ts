@@ -17,16 +17,27 @@ export class Garage extends BasePage {
   create(parent: HTMLElement): void {
     parent.append(this.container);
     this.container.className = "garage";
-    this.container.append(createCarComponent(() => this.createCar()));
-    this.container.append(updateCarComponent(() => this.updateCar()));
-    this.container.append(
+
+    const garageControlContainer = new ElementCreator({
+      parent: this.container,
+      classes: ["garage-control-container"],
+    }).getElement();
+
+    garageControlContainer.append(createCarComponent(() => this.createCar()));
+    garageControlContainer.append(updateCarComponent(() => this.updateCar()));
+    garageControlContainer.append(
       garageControlButtonsComponent(
         () => this.startRace(),
         () => this.resetAllCars(),
         () => this.generateCars(),
       ),
     );
-    this.container.append(garageInfoComponent(7, 1));
+
+    const garageInfoCarContainer = new ElementCreator({
+      parent: this.container,
+      classes: ["garage-info-car-container"],
+    }).getElement();
+    garageInfoCarContainer.append(garageInfoComponent(7, 1));
 
     const carArray = [
       { name: "Tesla", color: "#00FF00", id: 1 },
@@ -39,7 +50,7 @@ export class Garage extends BasePage {
     ];
 
     const garageCarContainer = new ElementCreator({
-      parent: this.container,
+      parent: garageInfoCarContainer,
       classes: ["garage-car-container"],
     }).getElement();
 

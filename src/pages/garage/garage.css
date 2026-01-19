@@ -1,6 +1,17 @@
 .garage {
   flex-direction: column;
-  gap: 1.3rem;
+  gap: 4rem;
+}
+
+.garage-control-container,
+.garage-info-car-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.garage-info-car-container {
+  gap: 15px;
 }
 
 .garage-car-container {
