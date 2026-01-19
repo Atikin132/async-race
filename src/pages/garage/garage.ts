@@ -1,12 +1,16 @@
+import createCarComponent from "../../components/create-car.component/create-car.component.js";
 import raceContainer from "../../components/race-container/race-container.js";
 import { BasePage } from "../base-page.js";
 import "./garage.css";
 
 export class Garage extends BasePage {
+  private createCar(): void {}
+
   create(parent: HTMLElement): void {
     parent.append(this.container);
     this.container.className = "garage";
     this.container.innerHTML = `<h2>Garage</h2>`;
+    this.container.append(createCarComponent(() => this.createCar()));
     const carArray = [
       { name: "Tesla", color: "#00FF00", id: 1 },
       { name: "Ford", color: "#0000FF", id: 2 },
