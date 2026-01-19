@@ -1,5 +1,6 @@
 .update-car-component-container {
   width: fit-content;
+  max-width: 340px;
   display: flex;
   flex-direction: column;
   gap: 5px;

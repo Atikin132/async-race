@@ -1,4 +1,5 @@
 import createCarComponent from "../../components/create-car.component/create-car.component.js";
+import garageControlButtonsComponent from "../../components/garage-control-buttons.component/garage-control-buttons.component.js";
 import garageInfoComponent from "../../components/garage-info.component/garage-info.component.js";
 import raceContainerComponent from "../../components/race-container.component/race-container.component.js";
 import updateCarComponent from "../../components/update-car.component/update-car.component.js";
@@ -9,12 +10,22 @@ import "./garage.css";
 export class Garage extends BasePage {
   private createCar(): void {}
   private updateCar(): void {}
+  private startRace(): void {}
+  private resetAllCars(): void {}
+  private generateCars(): void {}
 
   create(parent: HTMLElement): void {
     parent.append(this.container);
     this.container.className = "garage";
     this.container.append(createCarComponent(() => this.createCar()));
     this.container.append(updateCarComponent(() => this.updateCar()));
+    this.container.append(
+      garageControlButtonsComponent(
+        () => this.startRace(),
+        () => this.resetAllCars(),
+        () => this.generateCars(),
+      ),
+    );
     this.container.append(garageInfoComponent(7, 1));
 
     const carArray = [

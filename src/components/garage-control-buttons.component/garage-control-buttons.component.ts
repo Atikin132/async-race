@@ -1,0 +1,39 @@
+import ButtonCreator from "../../utils/button/button-creator.js";
+import ElementCreator from "../../utils/element-creator.js";
+import "./garage-control-buttons.component.css";
+
+export default function garageControlButtonsComponent(
+  startRace: () => void,
+  resetAllCars: () => void,
+  generateCars: () => void,
+): HTMLElement {
+  const container = new ElementCreator({
+    classes: ["garage-control-buttons-container"],
+  }).getElement();
+
+  const startRaceBtn = new ButtonCreator({
+    parent: container,
+    text: "Race",
+    classes: ["start-race-btn", "button"],
+  }).getElement();
+
+  startRaceBtn.addEventListener("click", startRace);
+
+  const resetAllCarsBtn = new ButtonCreator({
+    parent: container,
+    text: "Reset",
+    classes: ["reset-all-cars-btn", "button"],
+  }).getElement();
+
+  resetAllCarsBtn.addEventListener("click", resetAllCars);
+
+  const generateCarsBtn = new ButtonCreator({
+    parent: container,
+    text: "Generate Cars",
+    classes: ["generate-cars-btn", "button"],
+  }).getElement();
+
+  generateCarsBtn.addEventListener("click", generateCars);
+
+  return container;
+}
