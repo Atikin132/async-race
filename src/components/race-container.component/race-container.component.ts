@@ -2,9 +2,9 @@ import ButtonCreator from "../../utils/button/button-creator.js";
 import ElementCreator from "../../utils/element-creator.js";
 import ParagraphCreator from "../../utils/paragraph/paragraph-creator.js";
 import carSvg from "../../assets/svg/car.svg?raw";
-import "./race-container.css";
+import "./race-container.component.css";
 
-export default function raceContainer(
+export default function raceContainerComponent(
   carNameAPI: string = "Car Name",
   carColorAPI: string = "#000000",
   carIdAPI: string,
