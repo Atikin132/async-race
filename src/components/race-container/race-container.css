@@ -1,7 +1,6 @@
 .race-container {
   display: flex;
   flex-direction: column;
-  padding-top: 1.5rem;
   border-bottom: 4px dashed black;
   gap: 1rem;
 }
