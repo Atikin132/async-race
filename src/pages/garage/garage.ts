@@ -16,7 +16,17 @@ export class Garage extends BasePage {
   private _carsContainer?: HTMLElement;
   private _garageInfoCarContainer?: HTMLElement;
 
-  private createCar(): void {}
+  private async createCar(): Promise<void> {
+    const inputText =
+      document.querySelector<HTMLInputElement>(".create-container .input-text")
+        ?.value ?? "";
+    const inputColor =
+      document.querySelector<HTMLInputElement>(".create-container .input-color")
+        ?.value ?? "";
+
+    await garageController.createCar(inputText, inputColor);
+  }
+
   private updateCar(): void {}
   private startRace(): void {}
   private resetAllCars(): void {}
@@ -98,7 +108,12 @@ export class Garage extends BasePage {
       classes: ["garage-control-container"],
     }).getElement();
 
-    garageControlContainer.append(createCarComponent(() => this.createCar()));
+    garageControlContainer.append(
+      createCarComponent(async () => {
+        await this.createCar();
+        await this.update();
+      }),
+    );
     garageControlContainer.append(updateCarComponent(() => this.updateCar()));
     garageControlContainer.append(
       garageControlButtonsComponent(

@@ -6,7 +6,9 @@ import "./create-car.component.css";
 
 const INPUT_MAX_LENGTH = 20;
 
-export default function createCarComponent(createCar: () => void): HTMLElement {
+export default function createCarComponent(
+  createCar: () => Promise<void>,
+): HTMLElement {
   const createCarComponentContainer = new ElementCreator({
     classes: ["create-car-component-container"],
   }).getElement();
@@ -44,7 +46,9 @@ export default function createCarComponent(createCar: () => void): HTMLElement {
     text: "Create",
   }).getElement();
 
-  createButton.addEventListener("click", createCar);
+  createButton.addEventListener("click", () => {
+    void createCar();
+  });
 
   return createCarComponentContainer;
 }
