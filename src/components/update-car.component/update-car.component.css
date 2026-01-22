@@ -1,6 +1,7 @@
 .update-car-component-container {
+  max-width: 500px;
+  min-width: 444px;
   width: fit-content;
-  max-width: 340px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -25,6 +26,7 @@
   border-radius: 10px;
   border: 1px solid black;
   padding: 3px 10px;
+  flex: 1;
 }
 .update-container .input-text.no-active {
   background-color: rgb(180, 180, 180);
@@ -34,6 +36,7 @@
   background-color: white;
   border-radius: 5px;
   cursor: pointer;
+  flex: 1;
 }
 .update-container .input-color.no-active {
   cursor: not-allowed;
@@ -47,6 +50,7 @@
   padding: 7px;
   border-radius: 10px;
   transition: 0.3s ease;
+  flex: 1;
 }
 
 .update-button.no-active {

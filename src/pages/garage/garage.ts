@@ -5,14 +5,89 @@ import raceContainerComponent from "../../components/race-container.component/ra
 import updateCarComponent from "../../components/update-car.component/update-car.component.js";
 import ElementCreator from "../../utils/element-creator.js";
 import { BasePage } from "../base-page.js";
+import { garageController } from "../../controllers/garage.controller.js";
+import nextPrevComponent from "../../components/next-prev.component/next-prev.component.js";
+
 import "./garage.css";
 
+const FIRST_PAGE = 1;
+
 export class Garage extends BasePage {
+  private _carsContainer?: HTMLElement;
+  private _garageInfoCarContainer?: HTMLElement;
+
   private createCar(): void {}
   private updateCar(): void {}
   private startRace(): void {}
   private resetAllCars(): void {}
   private generateCars(): void {}
+
+  private get carsContainer(): HTMLElement {
+    if (!this._carsContainer) {
+      throw new Error("carsContainer is not initialized");
+    }
+    return this._carsContainer;
+  }
+
+  private get garageInfoCarContainer(): HTMLElement {
+    if (!this._garageInfoCarContainer) {
+      throw new Error("garageInfoCarContainer is not initialized");
+    }
+    return this._garageInfoCarContainer;
+  }
+
+  private renderCars(): void {
+    this.carsContainer.innerHTML = "";
+    for (const car of garageController.cars) {
+      if (car.id !== undefined) {
+        this.carsContainer.append(
+          raceContainerComponent(car.name, car.color, car.id.toString()),
+        );
+      }
+    }
+  }
+
+  private renderInfoContainer(): void {
+    this.garageInfoCarContainer
+      .querySelector(".garage-info-container")
+      ?.remove();
+
+    this.garageInfoCarContainer.prepend(
+      garageInfoComponent(
+        garageController.totalCarCount,
+        garageController.currentPage,
+      ),
+    );
+  }
+  private updateNextPrevBtn() {
+    const prevBtn = document.querySelector(".prev-button");
+    const nextBtn = document.querySelector(".next-button");
+    if (prevBtn instanceof HTMLButtonElement) {
+      if (garageController.currentPage === FIRST_PAGE) {
+        prevBtn.classList.add("no-active");
+        prevBtn.disabled = true;
+      } else {
+        prevBtn.classList.remove("no-active");
+        prevBtn.disabled = false;
+      }
+    }
+    if (nextBtn instanceof HTMLButtonElement) {
+      if (garageController.currentPage === garageController.totalPages) {
+        nextBtn.classList.add("no-active");
+        nextBtn.disabled = true;
+      } else {
+        nextBtn.classList.remove("no-active");
+        nextBtn.disabled = false;
+      }
+    }
+  }
+
+  private async update(): Promise<void> {
+    await garageController.loadCars();
+    this.renderInfoContainer();
+    this.renderCars();
+    this.updateNextPrevBtn();
+  }
 
   create(parent: HTMLElement): void {
     parent.append(this.container);
@@ -33,31 +108,31 @@ export class Garage extends BasePage {
       ),
     );
 
-    const garageInfoCarContainer = new ElementCreator({
+    this._garageInfoCarContainer = new ElementCreator({
       parent: this.container,
       classes: ["garage-info-car-container"],
     }).getElement();
-    garageInfoCarContainer.append(garageInfoComponent(7, 1));
 
-    const carArray = [
-      { name: "Tesla", color: "#00FF00", id: 1 },
-      { name: "Ford", color: "#0000FF", id: 2 },
-      { name: "Ferrari", color: "#FF0000", id: 3 },
-      { name: "Audi", color: "#FFFF00", id: 4 },
-      { name: "Volkswagen", color: "#FF00FF", id: 5 },
-      { name: "Porsche", color: "#00FFFF", id: 6 },
-      { name: "Dodge", color: "#ff6a00", id: 7 },
-    ];
-
-    const garageCarContainer = new ElementCreator({
-      parent: garageInfoCarContainer,
+    this._carsContainer = new ElementCreator({
+      parent: this._garageInfoCarContainer,
       classes: ["garage-car-container"],
     }).getElement();
 
-    for (const car of carArray) {
-      garageCarContainer.append(
-        raceContainerComponent(car.name, car.color, car.id.toString()),
-      );
-    }
+    this.container.append(
+      nextPrevComponent(
+        async () => {
+          await garageController.prevPage();
+          await this.update();
+        },
+        async () => {
+          await garageController.nextPage();
+          await this.update();
+        },
+      ),
+    );
+
+    this.update().catch(() => {
+      throw new Error("Error loading garage");
+    });
   }
 }

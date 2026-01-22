@@ -1,5 +1,6 @@
 .create-car-component-container {
-  min-width: 340px;
+  max-width: 450px;
+  min-width: 444px;
   width: fit-content;
   display: flex;
   flex-direction: column;
@@ -25,12 +26,14 @@
   border-radius: 10px;
   border: 1px solid black;
   padding: 3px 10px;
+  flex: 1;
 }
 
 .input-color {
   background-color: white;
   border-radius: 5px;
   cursor: pointer;
+  flex: 1;
 }
 
 .create-button {
@@ -40,6 +43,7 @@
   padding: 7px;
   border-radius: 10px;
   transition: 0.3s ease;
+  flex: 1;
 }
 
 .create-button:hover {

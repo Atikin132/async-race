@@ -1,6 +1,7 @@
 .garage-control-buttons-container {
+  max-width: 500px;
+  min-width: 444px;
   width: fit-content;
-  min-width: 340px;
   display: flex;
   gap: 5px;
   padding: 5px;
