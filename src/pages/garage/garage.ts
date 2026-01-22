@@ -27,6 +27,10 @@ export class Garage extends BasePage {
     await garageController.createCar(inputText, inputColor);
   }
 
+  private async deleteCar(id: number): Promise<void> {
+    await garageController.deleteCar(id);
+  }
+
   private updateCar(): void {}
   private startRace(): void {}
   private resetAllCars(): void {}
@@ -51,7 +55,17 @@ export class Garage extends BasePage {
     for (const car of garageController.cars) {
       if (car.id !== undefined) {
         this.carsContainer.append(
-          raceContainerComponent(car.name, car.color, car.id.toString()),
+          raceContainerComponent(
+            car.name,
+            car.color,
+            car.id.toString(),
+            async () => {
+              if (car.id !== undefined) {
+                await this.deleteCar(car.id);
+              }
+              await this.update();
+            },
+          ),
         );
       }
     }

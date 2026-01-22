@@ -32,6 +32,10 @@ class GarageController {
     return car;
   }
 
+  async deleteCar(id: number): Promise<void> {
+    await garageService.deleteCar(id);
+  }
+
   get currentPage(): number {
     return this.page;
   }

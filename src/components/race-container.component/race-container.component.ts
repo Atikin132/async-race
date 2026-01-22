@@ -8,6 +8,7 @@ export default function raceContainerComponent(
   carNameAPI: string = "Car Name",
   carColorAPI: string = "#000000",
   carIdAPI: string,
+  deleteCar: (id: string) => Promise<void>,
 ): HTMLElement {
   const raceContainerElement = new ElementCreator({
     classes: ["race-container"],
@@ -39,7 +40,9 @@ export default function raceContainerComponent(
     text: "Remove",
   }).getElement();
 
-  remove.addEventListener("click", () => {});
+  remove.addEventListener("click", () => {
+    void deleteCar(carIdAPI);
+  });
 
   const carName = new ParagraphCreator({
     parent: editNameContainer,
