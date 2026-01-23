@@ -1,21 +1,22 @@
 import ElementCreator from "../../utils/element-creator.js";
 import HeadingsCreator from "../../utils/headings/headings-creator.js";
-import "./garage-info.component.css";
+import "./info-page.component.css";
 
 const HEADINGS_TWO = 2;
 const HEADINGS_THREE = 3;
 
-export default function garageInfoComponent(
-  carsNumber: number,
+export default function infoPageComponent(
+  screen: string,
+  itemsNumber: number,
   pageNumber: number,
 ): HTMLElement {
   const container = new ElementCreator({
-    classes: ["garage-info-container"],
+    classes: ["info-page-container"],
   }).getElement();
-  const garageTitle = new HeadingsCreator(HEADINGS_TWO, {
+  const screenTitle = new HeadingsCreator(HEADINGS_TWO, {
     parent: container,
   }).getElement();
-  garageTitle.textContent = `Garage (${carsNumber})`;
+  screenTitle.textContent = `${screen} (${itemsNumber})`;
 
   const pageTitle = new HeadingsCreator(HEADINGS_THREE, {
     parent: container,

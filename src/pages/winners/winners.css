@@ -1,0 +1,10 @@
+.winners {
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.winners-info-table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

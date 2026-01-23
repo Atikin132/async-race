@@ -10,6 +10,10 @@
   gap: 10px;
 }
 
+.garage-control-container {
+  align-items: center;
+}
+
 .garage-info-car-container {
   gap: 15px;
 }

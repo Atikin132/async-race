@@ -1,6 +1,5 @@
 import createCarComponent from "../../components/create-car.component/create-car.component.js";
 import garageControlButtonsComponent from "../../components/garage-control-buttons.component/garage-control-buttons.component.js";
-import garageInfoComponent from "../../components/garage-info.component/garage-info.component.js";
 import raceContainerComponent from "../../components/race-container.component/race-container.component.js";
 import updateCarComponent from "../../components/update-car.component/update-car.component.js";
 import ElementCreator from "../../utils/element-creator.js";
@@ -10,6 +9,7 @@ import nextPrevComponent from "../../components/next-prev.component/next-prev.co
 
 import "./garage.css";
 import { Car } from "../../interfaces/car.interface.js";
+import infoPageComponent from "../../components/info-page.component/info-page.component.js";
 
 const FIRST_PAGE = 1;
 const GENERATE_CARS_NUMBER = 100;
@@ -219,12 +219,11 @@ export class Garage extends BasePage {
   }
 
   private renderInfoContainer(): void {
-    this.garageInfoCarContainer
-      .querySelector(".garage-info-container")
-      ?.remove();
+    this.garageInfoCarContainer.querySelector(".info-page-container")?.remove();
 
     this.garageInfoCarContainer.prepend(
-      garageInfoComponent(
+      infoPageComponent(
+        "Garage",
         garageController.totalCarCount,
         garageController.currentPage,
       ),
