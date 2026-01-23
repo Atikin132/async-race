@@ -1,0 +1,15 @@
+.winners-table {
+  width: 100%;
+  padding: 10px;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.tbody .trow {
+  border-top: 1px solid black;
+}
+
+.theader,
+.tcell {
+  padding: 5px 5px;
+}

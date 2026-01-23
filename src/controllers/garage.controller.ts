@@ -22,6 +22,11 @@ class GarageController {
     this.totalCarCount = result.totalCount;
   }
 
+  async getCar(id: number): Promise<Car | undefined> {
+    const result = await garageService.getCar(id);
+    return result;
+  }
+
   async createCar(name: string, color: string): Promise<Car | undefined> {
     const car = await garageService.createCar(name, color);
 

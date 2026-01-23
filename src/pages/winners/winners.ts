@@ -2,20 +2,28 @@ import infoPageComponent from "../../components/info-page.component/info-page.co
 import ElementCreator from "../../utils/element-creator.js";
 import { BasePage } from "../base-page.js";
 import nextPrevComponent from "../../components/next-prev.component/next-prev.component.js";
-
-import "./winners.css";
 import { winnersController } from "../../controllers/winners.controller.js";
 import ButtonCreator from "../../utils/button/button-creator.js";
+import winnersTableComponent from "../../components/winners-table.component/winners-table.component.js";
+import "./winners.css";
 
 const FIRST_PAGE = 1;
 export class Winners extends BasePage {
   private _winnersInfoTableContainer?: HTMLElement;
+  private _winnersTable?: HTMLElement;
 
   private get winnersInfoTableContainer(): HTMLElement {
     if (!this._winnersInfoTableContainer) {
       throw new Error("winnersInfoTableContainer is not initialized");
     }
     return this._winnersInfoTableContainer;
+  }
+
+  private get winnersTable(): HTMLElement {
+    if (!this._winnersTable) {
+      throw new Error("winnersTable is not initialized");
+    }
+    return this._winnersTable;
   }
 
   private renderInfoContainer(): void {
@@ -31,6 +39,17 @@ export class Winners extends BasePage {
       ),
     );
   }
+
+  private renderTable(): void {
+    this.winnersTable.innerHTML = "";
+    this.winnersTable.append(
+      winnersTableComponent(
+        winnersController.winners,
+        winnersController.currentPage,
+      ),
+    );
+  }
+
   private updateNextPrevBtn() {
     const prevBtn = document.querySelector(".winners .prev-button");
     const nextBtn = document.querySelector(".winners .next-button");
@@ -57,6 +76,7 @@ export class Winners extends BasePage {
   private async update(): Promise<void> {
     await winnersController.loadWinners();
     this.renderInfoContainer();
+    this.renderTable();
     this.updateNextPrevBtn();
   }
 
@@ -90,6 +110,11 @@ export class Winners extends BasePage {
     this._winnersInfoTableContainer = new ElementCreator({
       parent: this.container,
       classes: ["winners-info-table-container"],
+    }).getElement();
+
+    this._winnersTable = new ElementCreator({
+      parent: this._winnersInfoTableContainer,
+      classes: ["winners-table-container"],
     }).getElement();
 
     this.container.append(
