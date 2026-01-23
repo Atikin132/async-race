@@ -9,12 +9,14 @@ import { garageController } from "../../controllers/garage.controller.js";
 import nextPrevComponent from "../../components/next-prev.component/next-prev.component.js";
 
 import "./garage.css";
+import { Car } from "../../interfaces/car.interface.js";
 
 const FIRST_PAGE = 1;
 
 export class Garage extends BasePage {
   private _carsContainer?: HTMLElement;
   private _garageInfoCarContainer?: HTMLElement;
+  private selectedCar: Car = { name: "", color: "" };
 
   private async createCar(): Promise<void> {
     const inputText =
@@ -27,11 +29,82 @@ export class Garage extends BasePage {
     await garageController.createCar(inputText, inputColor);
   }
 
+  private async updateCar(): Promise<void> {
+    const inputText = document.querySelector<HTMLInputElement>(
+      ".update-container .input-text",
+    );
+    const inputColor = document.querySelector<HTMLInputElement>(
+      ".update-container .input-color",
+    );
+
+    if (this.selectedCar.id !== undefined && inputText && inputColor) {
+      await garageController.updateCar(
+        this.selectedCar.id,
+        inputText.value,
+        inputColor.value,
+      );
+    }
+
+    if (inputText) {
+      inputText.classList.add("no-active");
+      inputText.value = "";
+      inputText.disabled = true;
+    }
+
+    if (inputColor) {
+      inputColor.classList.add("no-active");
+      inputColor.value = "#000000";
+      inputColor.disabled = true;
+    }
+
+    const updateButton = document.querySelector<HTMLInputElement>(
+      ".update-container .update-button",
+    );
+
+    if (updateButton) {
+      updateButton.classList.add("no-active");
+      updateButton.disabled = true;
+    }
+  }
+
   private async deleteCar(id: number): Promise<void> {
     await garageController.deleteCar(id);
   }
 
-  private updateCar(): void {}
+  private selectCar(id: number, name: string, color: string) {
+    this.selectedCar.id = id;
+    this.selectedCar.name = name;
+    this.selectedCar.color = color;
+    const inputText = document.querySelector<HTMLInputElement>(
+      ".update-container .input-text",
+    );
+
+    if (inputText) {
+      inputText.classList.remove("no-active");
+      inputText.value = name;
+      inputText.disabled = false;
+    }
+
+    const inputColor = document.querySelector<HTMLInputElement>(
+      ".update-container .input-color",
+    );
+
+    if (inputColor) {
+      inputColor.classList.remove("no-active");
+      inputColor.value = color;
+      inputColor.disabled = false;
+    }
+
+    const updateButton = document.querySelector<HTMLInputElement>(
+      ".update-container .update-button",
+    );
+
+    if (updateButton) {
+      updateButton.classList.remove("no-active");
+      updateButton.disabled = false;
+    }
+  }
+
   private startRace(): void {}
   private resetAllCars(): void {}
   private generateCars(): void {}
@@ -59,6 +132,11 @@ export class Garage extends BasePage {
             car.name,
             car.color,
             car.id.toString(),
+            () => {
+              if (car.id !== undefined) {
+                this.selectCar(car.id, car.name, car.color);
+              }
+            },
             async () => {
               if (car.id !== undefined) {
                 await this.deleteCar(car.id);
@@ -128,7 +206,14 @@ export class Garage extends BasePage {
         await this.update();
       }),
     );
-    garageControlContainer.append(updateCarComponent(() => this.updateCar()));
+    garageControlContainer.append(
+      updateCarComponent(async () => {
+        if (this.selectedCar.id !== undefined) {
+          await this.updateCar();
+          await this.update();
+        }
+      }),
+    );
     garageControlContainer.append(
       garageControlButtonsComponent(
         () => this.startRace(),

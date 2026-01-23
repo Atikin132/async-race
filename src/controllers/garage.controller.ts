@@ -32,6 +32,20 @@ class GarageController {
     return car;
   }
 
+  async updateCar(
+    id: number,
+    name: string,
+    color: string,
+  ): Promise<Car | undefined> {
+    const car = await garageService.updateCar(id, name, color);
+
+    if (!car) {
+      return undefined;
+    }
+
+    return car;
+  }
+
   async deleteCar(id: number): Promise<void> {
     await garageService.deleteCar(id);
   }

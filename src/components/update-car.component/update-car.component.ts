@@ -6,7 +6,9 @@ import "./update-car.component.css";
 
 const INPUT_MAX_LENGTH = 20;
 
-export default function updateCarComponent(updateCar: () => void): HTMLElement {
+export default function updateCarComponent(
+  updateCar: () => Promise<void>,
+): HTMLElement {
   const updateCarComponentContainer = new ElementCreator({
     classes: ["update-car-component-container"],
   }).getElement();
@@ -46,7 +48,9 @@ export default function updateCarComponent(updateCar: () => void): HTMLElement {
     text: "Update",
   }).getElement();
 
-  updateButton.addEventListener("click", updateCar);
+  updateButton.addEventListener("click", () => {
+    void updateCar();
+  });
 
   return updateCarComponentContainer;
 }

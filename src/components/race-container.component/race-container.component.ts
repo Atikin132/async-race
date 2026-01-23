@@ -8,6 +8,7 @@ export default function raceContainerComponent(
   carNameAPI: string = "Car Name",
   carColorAPI: string = "#000000",
   carIdAPI: string,
+  selectCar: () => void,
   deleteCar: (id: string) => Promise<void>,
 ): HTMLElement {
   const raceContainerElement = new ElementCreator({
@@ -32,7 +33,9 @@ export default function raceContainerComponent(
     text: "Select",
   }).getElement();
 
-  select.addEventListener("click", () => {});
+  select.addEventListener("click", () => {
+    selectCar();
+  });
 
   const remove = new ButtonCreator({
     parent: editBtns,
