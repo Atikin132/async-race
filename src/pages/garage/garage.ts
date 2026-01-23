@@ -12,7 +12,8 @@ import "./garage.css";
 import { Car } from "../../interfaces/car.interface.js";
 
 const FIRST_PAGE = 1;
-
+const GENERATE_CARS_NUMBER = 100;
+const COLOR_FFFFFF_IN_DECIMAL = Number.parseInt("ffffff", 16);
 export class Garage extends BasePage {
   private _carsContainer?: HTMLElement;
   private _garageInfoCarContainer?: HTMLElement;
@@ -107,7 +108,75 @@ export class Garage extends BasePage {
 
   private startRace(): void {}
   private resetAllCars(): void {}
-  private generateCars(): void {}
+
+  private generateCarsName(): string[] {
+    const carsNames: string[] = [];
+    const carsBrands: string[] = [
+      "Toyota",
+      "Lexus",
+      "Volkswagen",
+      "Audi",
+      "Porsche",
+      "Bentley",
+      "Lamborghini",
+      "Dodge",
+      "Tesla",
+      "Maserati",
+      "Renault",
+      "Mitsubishi",
+      "Chevrolet",
+      "Ford",
+      "Volvo",
+    ];
+    const carsModels: string[] = [
+      "Camry",
+      "RX",
+      "Jetta",
+      "A5",
+      "911",
+      "Bentayga",
+      "Huracan",
+      "Challenger",
+      "Model S",
+      "MCPura",
+      "Scenic",
+      "Pajero",
+      "Silverado",
+      "Mustang",
+      "XC90",
+    ];
+
+    for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
+      const brand = carsBrands[Math.floor(Math.random() * carsBrands.length)];
+      const model = carsModels[Math.floor(Math.random() * carsModels.length)];
+      carsNames.push(`${brand} ${model}`);
+    }
+
+    return carsNames;
+  }
+
+  private generateCarsColors(): string[] {
+    const carsColors: string[] = [];
+
+    for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
+      const color = `#${Math.floor(Math.random() * COLOR_FFFFFF_IN_DECIMAL)
+        .toString(16)
+        .padStart(6, "0")}`;
+      carsColors.push(color);
+    }
+    return carsColors;
+  }
+
+  private async generateCars(): Promise<void> {
+    const carsNames = this.generateCarsName();
+    const carsColors = this.generateCarsColors();
+    for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
+      await garageController.createCar(
+        carsNames[i] ?? "CAR_NAME",
+        carsColors[i] ?? "#000000",
+      );
+    }
+  }
 
   private get carsContainer(): HTMLElement {
     if (!this._carsContainer) {
@@ -218,7 +287,10 @@ export class Garage extends BasePage {
       garageControlButtonsComponent(
         () => this.startRace(),
         () => this.resetAllCars(),
-        () => this.generateCars(),
+        async () => {
+          await this.generateCars();
+          await this.update();
+        },
       ),
     );
 
