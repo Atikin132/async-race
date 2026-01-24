@@ -1,7 +1,7 @@
 import { Car } from "../interfaces/car.interface.js";
 import { EngineDriveResponse } from "../interfaces/engine-drive-response.interface.js";
 import { EngineStartEndResponse } from "../interfaces/engine-start-end-response.interface.js";
-import { EngineStatus } from "../types/engine-status.type.js";
+import { EngineStatus } from "../types/engine-status.enum.js";
 import {
   hasBooleanProp,
   hasNumberProp,

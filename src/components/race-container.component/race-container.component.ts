@@ -3,6 +3,7 @@ import ElementCreator from "../../utils/element-creator.js";
 import ParagraphCreator from "../../utils/paragraph/paragraph-creator.js";
 import carSvg from "../../assets/svg/car.svg?raw";
 import "./race-container.component.css";
+import { CarController } from "../../controllers/car.controller.js";
 
 export default function raceContainerComponent(
   carNameAPI: string = "Car Name",
@@ -69,14 +70,18 @@ export default function raceContainerComponent(
     classes: ["control-btns__start", "button"],
   }).getElement();
 
-  start.addEventListener("click", () => {});
+  start.addEventListener("click", () => {
+    void carController.start();
+  });
 
   const reset = new ButtonCreator({
     parent: controlBtns,
     classes: ["control-btns__reset", "no-active", "button"],
   }).getElement();
 
-  reset.addEventListener("click", () => {});
+  reset.addEventListener("click", () => {
+    void carController.reset();
+  });
 
   const raceRoadContainer = new ElementCreator({
     parent: trackContainer,
@@ -98,6 +103,14 @@ export default function raceContainerComponent(
   }).getElement();
 
   finish.textContent = "";
+
+  const carController = new CarController(
+    Number(carIdAPI),
+    car,
+    raceRoadContainer,
+    start,
+    reset,
+  );
 
   return raceContainerElement;
 }
