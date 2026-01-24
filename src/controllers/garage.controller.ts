@@ -6,7 +6,8 @@ import { winnersController } from "./winners.controller.js";
 const CARS_PER_PAGE = 7;
 const FIRST_PAGE = 1;
 const GENERATE_CARS_NUMBER = 100;
-const COLOR_FFFFFF_IN_DECIMAL = Number.parseInt("ffffff", 16);
+const COLOR_WHITE_IN_DECIMAL = Number.parseInt("ffffff", 16);
+const COLOR_BLACK = "#000000";
 
 class GarageController {
   private page = FIRST_PAGE;
@@ -60,26 +61,13 @@ class GarageController {
       await winnersUI.update();
     }
 
-    if (inputText) {
-      inputText.classList.add("no-active");
-      inputText.value = "";
-      inputText.disabled = true;
-    }
-
-    if (inputColor) {
-      inputColor.classList.add("no-active");
-      inputColor.value = "#000000";
-      inputColor.disabled = true;
-    }
-
-    const updateButton = document.querySelector<HTMLInputElement>(
-      ".update-container .update-button",
+    this.toggleUpdateElement(".update-container .input-text", "", false);
+    this.toggleUpdateElement(
+      ".update-container .input-color",
+      COLOR_BLACK,
+      false,
     );
-
-    if (updateButton) {
-      updateButton.classList.add("no-active");
-      updateButton.disabled = true;
-    }
+    this.toggleUpdateElement(".update-container .update-button", "", false);
   }
 
   async deleteCar(id: number): Promise<void> {
@@ -114,34 +102,25 @@ class GarageController {
     this.selectedCar.id = id;
     this.selectedCar.name = name;
     this.selectedCar.color = color;
-    const inputText = document.querySelector<HTMLInputElement>(
-      ".update-container .input-text",
-    );
 
-    if (inputText) {
-      inputText.classList.remove("no-active");
-      inputText.value = name;
-      inputText.disabled = false;
+    this.toggleUpdateElement(".update-container .input-text", name, true);
+    this.toggleUpdateElement(".update-container .input-color", color, true);
+    this.toggleUpdateElement(".update-container .update-button", "", true);
+  }
+
+  private toggleUpdateElement(
+    selector: string,
+    value: string,
+    enable: boolean,
+  ) {
+    const element = document.querySelector<HTMLInputElement>(selector);
+    if (!element) {
+      return;
     }
 
-    const inputColor = document.querySelector<HTMLInputElement>(
-      ".update-container .input-color",
-    );
-
-    if (inputColor) {
-      inputColor.classList.remove("no-active");
-      inputColor.value = color;
-      inputColor.disabled = false;
-    }
-
-    const updateButton = document.querySelector<HTMLInputElement>(
-      ".update-container .update-button",
-    );
-
-    if (updateButton) {
-      updateButton.classList.remove("no-active");
-      updateButton.disabled = false;
-    }
+    element.classList.toggle("no-active", !enable);
+    element.disabled = !enable;
+    element.value = enable ? value : "";
   }
 
   private generateCarsName(): string[] {
@@ -194,7 +173,7 @@ class GarageController {
     const carsColors: string[] = [];
 
     for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
-      const color = `#${Math.floor(Math.random() * COLOR_FFFFFF_IN_DECIMAL)
+      const color = `#${Math.floor(Math.random() * COLOR_WHITE_IN_DECIMAL)
         .toString(16)
         .padStart(6, "0")}`;
       carsColors.push(color);
