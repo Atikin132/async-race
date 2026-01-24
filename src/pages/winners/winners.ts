@@ -46,6 +46,10 @@ export class Winners extends BasePage {
       winnersTableComponent(
         winnersController.winners,
         winnersController.currentPage,
+        async (field) => {
+          winnersController.setSort(field);
+          await this.update();
+        },
       ),
     );
   }
@@ -78,6 +82,7 @@ export class Winners extends BasePage {
     this.renderInfoContainer();
     this.renderTable();
     this.updateNextPrevBtn();
+    this.updateSortIndicators();
   }
 
   private async generateWinners(): Promise<void> {
@@ -91,6 +96,19 @@ export class Winners extends BasePage {
   private async handleGenerateClick(): Promise<void> {
     await this.generateWinners();
     await this.update();
+  }
+
+  private updateSortIndicators(): void {
+    const headers =
+      this.container.querySelectorAll<HTMLTableCellElement>("th.sortable");
+
+    for (const th of headers) {
+      const field = th.dataset.sort;
+      th.classList.remove("ASC", "DESC");
+      if (field === winnersController.sortField) {
+        th.classList.add(winnersController.sortOrder);
+      }
+    }
   }
 
   create(parent: HTMLElement): void {

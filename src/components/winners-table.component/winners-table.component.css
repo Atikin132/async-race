@@ -13,3 +13,16 @@
 .tcell {
   padding: 5px 5px;
 }
+
+.theader.sortable {
+  cursor: pointer;
+  position: relative;
+}
+
+.theader.sortable.ASC::after {
+  content: "↑";
+}
+
+.theader.sortable.DESC::after {
+  content: "↓";
+}

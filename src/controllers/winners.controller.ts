@@ -1,5 +1,7 @@
 import { Winner } from "../interfaces/winner.interface.js";
 import { winnersService } from "../services/winners-service.js";
+import { SortOrder } from "../types/sort-order.type.js";
+import { WinnersSortField } from "../types/winners-sort-field.type.js";
 
 const WINNERS_PER_PAGE = 10;
 const FIRST_PAGE = 1;
@@ -9,8 +11,24 @@ class WinnersController {
   winners: Winner[] = [];
   totalWinnersCount = 0;
 
+  private _sortField?: WinnersSortField;
+  private _sortOrder: SortOrder = "ASC";
+
+  get sortField(): WinnersSortField | undefined {
+    return this._sortField;
+  }
+
+  get sortOrder(): SortOrder {
+    return this._sortOrder;
+  }
+
   async loadWinners(): Promise<void> {
-    const result = await winnersService.getWinners(this.page, WINNERS_PER_PAGE);
+    const result = await winnersService.getWinners(
+      this.currentPage,
+      WINNERS_PER_PAGE,
+      this._sortField,
+      this._sortOrder,
+    );
 
     if (!result) {
       this.winners = [];
@@ -77,6 +95,17 @@ class WinnersController {
       this.page -= 1;
       await this.loadWinners();
     }
+  }
+
+  setSort(field: WinnersSortField): void {
+    if (this._sortField === field) {
+      this._sortOrder = this._sortOrder === "ASC" ? "DESC" : "ASC";
+    } else {
+      this._sortField = field;
+      this._sortOrder = "ASC";
+    }
+
+    this.page = FIRST_PAGE;
   }
 }
 

@@ -7,6 +7,7 @@ import TableSectionCreator from "../../utils/table/table-section-creator.js";
 import carSvg from "../../assets/svg/car-winners-table.svg?raw";
 import "./winners-table.component.css";
 import { garageController } from "../../controllers/garage.controller.js";
+import { WinnersSortField } from "../../types/winners-sort-field.type.js";
 
 const WINNERS_PER_PAGE = 10;
 const PAGE_START_INDEX_OFFSET = 9;
@@ -14,6 +15,7 @@ const PAGE_START_INDEX_OFFSET = 9;
 export default function winnersTableComponent(
   winners: Winner[],
   page: number,
+  onSort: (field: WinnersSortField) => Promise<void>,
 ): HTMLElement {
   const table = new TableCreator({
     classes: ["winners-table"],
@@ -28,15 +30,31 @@ export default function winnersTableComponent(
     parent: thead,
   }).getElement();
 
-  const tableHead = ["Number", "Car", "Name", "Wins", "Best time (seconds)"];
+  const tableHead: { title: string; sort?: WinnersSortField }[] = [
+    { title: "Number" },
+    { title: "Car" },
+    { title: "Name" },
+    { title: "Wins", sort: "wins" },
+    { title: "Best time (seconds)", sort: "time" },
+  ];
 
-  for (const title of tableHead) {
-    new TableCellCreator({
-      text: title,
+  for (const head of tableHead) {
+    const th = new TableCellCreator({
+      text: head.title,
       cellType: "th",
       classes: ["theader"],
       parent: headRow,
-    });
+    }).getElement();
+
+    if (head.sort) {
+      th.classList.add("sortable");
+      th.dataset.sort = head.sort;
+      const sortField = head.sort;
+
+      th.addEventListener("click", () => {
+        void onSort(sortField);
+      });
+    }
   }
 
   const tbody = new TableSectionCreator({
