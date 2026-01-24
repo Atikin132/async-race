@@ -77,7 +77,7 @@ export class Winners extends BasePage {
     }
   }
 
-  private async update(): Promise<void> {
+  async update(): Promise<void> {
     await winnersController.loadWinners();
     this.renderInfoContainer();
     this.renderTable();
@@ -153,3 +153,5 @@ export class Winners extends BasePage {
     });
   }
 }
+
+export const winnersUI = new Winners();

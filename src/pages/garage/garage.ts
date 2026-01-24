@@ -10,6 +10,8 @@ import nextPrevComponent from "../../components/next-prev.component/next-prev.co
 import "./garage.css";
 import { Car } from "../../interfaces/car.interface.js";
 import infoPageComponent from "../../components/info-page.component/info-page.component.js";
+import { winnersController } from "../../controllers/winners.controller.js";
+import { winnersUI } from "../winners/winners.js";
 
 const FIRST_PAGE = 1;
 const GENERATE_CARS_NUMBER = 100;
@@ -70,6 +72,8 @@ export class Garage extends BasePage {
 
   private async deleteCar(id: number): Promise<void> {
     await garageController.deleteCar(id);
+    await winnersController.deleteWinner(id);
+    await winnersUI.update();
   }
 
   private selectCar(id: number, name: string, color: string) {
@@ -279,6 +283,7 @@ export class Garage extends BasePage {
         if (this.selectedCar.id !== undefined) {
           await this.updateCar();
           await this.update();
+          await winnersUI.update();
         }
       }),
     );
