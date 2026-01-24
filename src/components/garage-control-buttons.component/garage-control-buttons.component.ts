@@ -3,7 +3,7 @@ import ElementCreator from "../../utils/element-creator.js";
 import "./garage-control-buttons.component.css";
 
 export default function garageControlButtonsComponent(
-  startRace: () => void,
+  startRace: () => Promise<void>,
   resetAllCars: () => Promise<void>,
   generateCars: () => Promise<void>,
 ): HTMLElement {
@@ -17,7 +17,9 @@ export default function garageControlButtonsComponent(
     classes: ["start-race-btn", "button"],
   }).getElement();
 
-  startRaceBtn.addEventListener("click", startRace);
+  startRaceBtn.addEventListener("click", () => {
+    void startRace();
+  });
 
   const resetAllCarsBtn = new ButtonCreator({
     parent: container,

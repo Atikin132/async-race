@@ -3,7 +3,6 @@ import ElementCreator from "../../utils/element-creator.js";
 import { BasePage } from "../base-page.js";
 import nextPrevComponent from "../../components/next-prev.component/next-prev.component.js";
 import { winnersController } from "../../controllers/winners.controller.js";
-import ButtonCreator from "../../utils/button/button-creator.js";
 import winnersTableComponent from "../../components/winners-table.component/winners-table.component.js";
 import "./winners.css";
 
@@ -85,19 +84,6 @@ export class Winners extends BasePage {
     this.updateSortIndicators();
   }
 
-  private async generateWinners(): Promise<void> {
-    await winnersController.createWinner(
-      winnersController.totalWinnersCount + 1,
-      2,
-      3,
-    );
-  }
-
-  private async handleGenerateClick(): Promise<void> {
-    await this.generateWinners();
-    await this.update();
-  }
-
   private updateSortIndicators(): void {
     const headers =
       this.container.querySelectorAll<HTMLTableCellElement>("th.sortable");
@@ -114,16 +100,6 @@ export class Winners extends BasePage {
   create(parent: HTMLElement): void {
     parent.append(this.container);
     this.container.className = "winners";
-
-    const button = new ButtonCreator({
-      parent: this.container,
-      classes: ["button"],
-      text: "Generate Winners",
-    }).getElement();
-
-    button.addEventListener("click", () => {
-      void this.handleGenerateClick();
-    });
 
     this._winnersInfoTableContainer = new ElementCreator({
       parent: this.container,

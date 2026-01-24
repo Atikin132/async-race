@@ -1,6 +1,7 @@
 import { Car } from "../interfaces/car.interface.js";
 import { winnersUI } from "../pages/winners/winners.js";
 import { garageService } from "../services/garage-service.js";
+import { winnersService } from "../services/winners-service.js";
 import { CarController } from "./car.controller.js";
 import { winnersController } from "./winners.controller.js";
 
@@ -9,6 +10,9 @@ const FIRST_PAGE = 1;
 const GENERATE_CARS_NUMBER = 100;
 const COLOR_WHITE_IN_DECIMAL = Number.parseInt("ffffff", 16);
 const COLOR_BLACK = "#000000";
+const CAR_NAME = "Car name";
+const ONE_WIN = 1;
+const MILLISECONDS_IN_SECOND = 1000;
 
 class GarageController {
   private page = FIRST_PAGE;
@@ -16,6 +20,7 @@ class GarageController {
   totalCarCount = 0;
   selectedCar: Car = { name: "", color: "" };
   carControllers: CarController[] = [];
+  winnerDetermined: boolean = false;
 
   async loadCars(): Promise<void> {
     const result = await garageService.getCars(this.page, CARS_PER_PAGE);
@@ -188,13 +193,41 @@ class GarageController {
     const carsColors = this.generateCarsColors();
     for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
       await garageService.createCar(
-        carsNames[i] ?? "CAR_NAME",
-        carsColors[i] ?? "#000000",
+        carsNames[i] ?? CAR_NAME,
+        carsColors[i] ?? COLOR_BLACK,
       );
     }
   }
 
-  startRace(): void {}
+  async startRace(): Promise<void> {
+    this.winnerDetermined = false;
+    await Promise.all(
+      this.carControllers.map((controller) => controller.start()),
+    );
+  }
+
+  async onCarFinish(carIdAPI: string, time: number) {
+    if (!garageController.winnerDetermined) {
+      garageController.winnerDetermined = true;
+
+      const carId = Number(carIdAPI);
+      const winner = await winnersService.getWinner(carId);
+      const timeInSeconds = time / MILLISECONDS_IN_SECOND;
+      if (winner) {
+        const bestTime =
+          winner.time < timeInSeconds ? winner?.time : timeInSeconds;
+        await winnersController.updateWinner(
+          carId,
+          winner.wins + ONE_WIN,
+          bestTime,
+        );
+      } else {
+        await winnersController.createWinner(carId, ONE_WIN, timeInSeconds);
+      }
+
+      await winnersUI.update();
+    }
+  }
 
   async resetAllCars(): Promise<void> {
     await Promise.all(

@@ -3,6 +3,7 @@ import { EngineStatus } from "../types/engine-status.enum.js";
 
 export class CarController {
   private animationId: number | undefined = undefined;
+  onFinishCallback?: (time: number) => Promise<void>;
 
   constructor(
     private carId: number,
@@ -10,7 +11,10 @@ export class CarController {
     private roadElement: HTMLElement,
     private startButton: HTMLButtonElement,
     private resetButton: HTMLButtonElement,
-  ) {}
+    onFinishCallback: (time: number) => Promise<void>,
+  ) {
+    this.onFinishCallback = onFinishCallback;
+  }
 
   private setBtnsStatus(driving: boolean): void {
     this.startButton.disabled = driving;
@@ -73,6 +77,10 @@ export class CarController {
 
       if (progress < 1) {
         this.animationId = requestAnimationFrame(animate);
+      } else {
+        if (this.onFinishCallback) {
+          void this.onFinishCallback(time);
+        }
       }
     };
 

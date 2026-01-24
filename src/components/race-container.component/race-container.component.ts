@@ -6,9 +6,12 @@ import "./race-container.component.css";
 import { CarController } from "../../controllers/car.controller.js";
 import { garageController } from "../../controllers/garage.controller.js";
 
+const CAR_NAME = "Car name";
+const COLOR_BLACK = "#000000";
+
 export default function raceContainerComponent(
-  carNameAPI: string = "Car Name",
-  carColorAPI: string = "#000000",
+  carNameAPI: string = CAR_NAME,
+  carColorAPI: string = COLOR_BLACK,
   carIdAPI: string,
   selectCar: () => void,
   deleteCar: (id: string) => Promise<void>,
@@ -111,6 +114,9 @@ export default function raceContainerComponent(
     raceRoadContainer,
     start,
     reset,
+    async (time) => {
+      await garageController.onCarFinish(carIdAPI, time);
+    },
   );
 
   garageController.carControllers.push(carController);

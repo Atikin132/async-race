@@ -124,7 +124,9 @@ export class Garage extends BasePage {
     );
     garageControlContainer.append(
       garageControlButtonsComponent(
-        () => garageController.startRace(),
+        async () => {
+          await garageController.startRace();
+        },
         async () => {
           await garageController.resetAllCars();
         },
