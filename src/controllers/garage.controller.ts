@@ -1,6 +1,7 @@
 import { Car } from "../interfaces/car.interface.js";
 import { winnersUI } from "../pages/winners/winners.js";
 import { garageService } from "../services/garage-service.js";
+import { CarController } from "./car.controller.js";
 import { winnersController } from "./winners.controller.js";
 
 const CARS_PER_PAGE = 7;
@@ -14,6 +15,7 @@ class GarageController {
   cars: Car[] = [];
   totalCarCount = 0;
   selectedCar: Car = { name: "", color: "" };
+  carControllers: CarController[] = [];
 
   async loadCars(): Promise<void> {
     const result = await garageService.getCars(this.page, CARS_PER_PAGE);
@@ -193,7 +195,12 @@ class GarageController {
   }
 
   startRace(): void {}
-  resetAllCars(): void {}
+
+  async resetAllCars(): Promise<void> {
+    await Promise.all(
+      this.carControllers.map((controller) => controller.reset()),
+    );
+  }
 }
 
 export const garageController = new GarageController();

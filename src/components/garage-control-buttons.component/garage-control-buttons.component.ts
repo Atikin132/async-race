@@ -4,7 +4,7 @@ import "./garage-control-buttons.component.css";
 
 export default function garageControlButtonsComponent(
   startRace: () => void,
-  resetAllCars: () => void,
+  resetAllCars: () => Promise<void>,
   generateCars: () => Promise<void>,
 ): HTMLElement {
   const container = new ElementCreator({
@@ -25,7 +25,9 @@ export default function garageControlButtonsComponent(
     classes: ["reset-all-cars-btn", "button"],
   }).getElement();
 
-  resetAllCarsBtn.addEventListener("click", resetAllCars);
+  resetAllCarsBtn.addEventListener("click", () => {
+    void resetAllCars();
+  });
 
   const generateCarsBtn = new ButtonCreator({
     parent: container,

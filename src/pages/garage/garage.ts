@@ -93,6 +93,7 @@ export class Garage extends BasePage {
 
   private async update(): Promise<void> {
     await garageController.loadCars();
+    garageController.carControllers.length = 0;
     this.renderInfoContainer();
     this.renderCars();
     this.updateNextPrevBtn();
@@ -124,7 +125,9 @@ export class Garage extends BasePage {
     garageControlContainer.append(
       garageControlButtonsComponent(
         () => garageController.startRace(),
-        () => garageController.resetAllCars(),
+        async () => {
+          await garageController.resetAllCars();
+        },
         async () => {
           await garageController.generateCars();
           await this.update();

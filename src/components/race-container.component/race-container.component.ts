@@ -4,6 +4,7 @@ import ParagraphCreator from "../../utils/paragraph/paragraph-creator.js";
 import carSvg from "../../assets/svg/car.svg?raw";
 import "./race-container.component.css";
 import { CarController } from "../../controllers/car.controller.js";
+import { garageController } from "../../controllers/garage.controller.js";
 
 export default function raceContainerComponent(
   carNameAPI: string = "Car Name",
@@ -111,6 +112,8 @@ export default function raceContainerComponent(
     start,
     reset,
   );
+
+  garageController.carControllers.push(carController);
 
   return raceContainerElement;
 }
