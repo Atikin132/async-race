@@ -1,13 +1,18 @@
 import { Car } from "../interfaces/car.interface.js";
+import { winnersUI } from "../pages/winners/winners.js";
 import { garageService } from "../services/garage-service.js";
+import { winnersController } from "./winners.controller.js";
 
 const CARS_PER_PAGE = 7;
 const FIRST_PAGE = 1;
+const GENERATE_CARS_NUMBER = 100;
+const COLOR_FFFFFF_IN_DECIMAL = Number.parseInt("ffffff", 16);
 
 class GarageController {
   private page = FIRST_PAGE;
   cars: Car[] = [];
   totalCarCount = 0;
+  selectedCar: Car = { name: "", color: "" };
 
   async loadCars(): Promise<void> {
     const result = await garageService.getCars(this.page, CARS_PER_PAGE);
@@ -27,32 +32,60 @@ class GarageController {
     return result;
   }
 
-  async createCar(name: string, color: string): Promise<Car | undefined> {
-    const car = await garageService.createCar(name, color);
+  async createCar(): Promise<void> {
+    const inputText =
+      document.querySelector<HTMLInputElement>(".create-container .input-text")
+        ?.value ?? "";
+    const inputColor =
+      document.querySelector<HTMLInputElement>(".create-container .input-color")
+        ?.value ?? "";
 
-    if (!car) {
-      return undefined;
-    }
-
-    return car;
+    await garageService.createCar(inputText, inputColor);
   }
 
-  async updateCar(
-    id: number,
-    name: string,
-    color: string,
-  ): Promise<Car | undefined> {
-    const car = await garageService.updateCar(id, name, color);
+  async updateCar(): Promise<void> {
+    const inputText = document.querySelector<HTMLInputElement>(
+      ".update-container .input-text",
+    );
+    const inputColor = document.querySelector<HTMLInputElement>(
+      ".update-container .input-color",
+    );
 
-    if (!car) {
-      return undefined;
+    if (this.selectedCar.id !== undefined && inputText && inputColor) {
+      await garageService.updateCar(
+        this.selectedCar.id,
+        inputText.value,
+        inputColor.value,
+      );
+      await winnersUI.update();
     }
 
-    return car;
+    if (inputText) {
+      inputText.classList.add("no-active");
+      inputText.value = "";
+      inputText.disabled = true;
+    }
+
+    if (inputColor) {
+      inputColor.classList.add("no-active");
+      inputColor.value = "#000000";
+      inputColor.disabled = true;
+    }
+
+    const updateButton = document.querySelector<HTMLInputElement>(
+      ".update-container .update-button",
+    );
+
+    if (updateButton) {
+      updateButton.classList.add("no-active");
+      updateButton.disabled = true;
+    }
   }
 
   async deleteCar(id: number): Promise<void> {
     await garageService.deleteCar(id);
+    await winnersController.deleteWinner(id);
+    await winnersUI.update();
   }
 
   get currentPage(): number {
@@ -76,6 +109,112 @@ class GarageController {
       await this.loadCars();
     }
   }
+
+  selectCar(id: number, name: string, color: string) {
+    this.selectedCar.id = id;
+    this.selectedCar.name = name;
+    this.selectedCar.color = color;
+    const inputText = document.querySelector<HTMLInputElement>(
+      ".update-container .input-text",
+    );
+
+    if (inputText) {
+      inputText.classList.remove("no-active");
+      inputText.value = name;
+      inputText.disabled = false;
+    }
+
+    const inputColor = document.querySelector<HTMLInputElement>(
+      ".update-container .input-color",
+    );
+
+    if (inputColor) {
+      inputColor.classList.remove("no-active");
+      inputColor.value = color;
+      inputColor.disabled = false;
+    }
+
+    const updateButton = document.querySelector<HTMLInputElement>(
+      ".update-container .update-button",
+    );
+
+    if (updateButton) {
+      updateButton.classList.remove("no-active");
+      updateButton.disabled = false;
+    }
+  }
+
+  private generateCarsName(): string[] {
+    const carsNames: string[] = [];
+    const carsBrands: string[] = [
+      "Toyota",
+      "Lexus",
+      "Volkswagen",
+      "Audi",
+      "Porsche",
+      "Bentley",
+      "Lamborghini",
+      "Dodge",
+      "Tesla",
+      "Maserati",
+      "Renault",
+      "Mitsubishi",
+      "Chevrolet",
+      "Ford",
+      "Volvo",
+    ];
+    const carsModels: string[] = [
+      "Camry",
+      "RX",
+      "Jetta",
+      "A5",
+      "911",
+      "Bentayga",
+      "Huracan",
+      "Challenger",
+      "Model S",
+      "MCPura",
+      "Scenic",
+      "Pajero",
+      "Silverado",
+      "Mustang",
+      "XC90",
+    ];
+
+    for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
+      const brand = carsBrands[Math.floor(Math.random() * carsBrands.length)];
+      const model = carsModels[Math.floor(Math.random() * carsModels.length)];
+      carsNames.push(`${brand} ${model}`);
+    }
+
+    return carsNames;
+  }
+
+  private generateCarsColors(): string[] {
+    const carsColors: string[] = [];
+
+    for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
+      const color = `#${Math.floor(Math.random() * COLOR_FFFFFF_IN_DECIMAL)
+        .toString(16)
+        .padStart(6, "0")}`;
+      carsColors.push(color);
+    }
+    return carsColors;
+  }
+
+  async generateCars(): Promise<void> {
+    const carsNames = this.generateCarsName();
+    const carsColors = this.generateCarsColors();
+    for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
+      await garageService.createCar(
+        carsNames[i] ?? "CAR_NAME",
+        carsColors[i] ?? "#000000",
+      );
+    }
+  }
+
+  startRace(): void {}
+  resetAllCars(): void {}
 }
 
 export const garageController = new GarageController();
