@@ -212,7 +212,8 @@ class GarageController {
 
       const carId = Number(carIdAPI);
       const winner = await winnersService.getWinner(carId);
-      const timeInSeconds = time / MILLISECONDS_IN_SECOND;
+      const carName = await this.getCar(carId);
+      const timeInSeconds = Number((time / MILLISECONDS_IN_SECOND).toFixed(2));
       if (winner) {
         const bestTime =
           winner.time < timeInSeconds ? winner?.time : timeInSeconds;
@@ -224,12 +225,30 @@ class GarageController {
       } else {
         await winnersController.createWinner(carId, ONE_WIN, timeInSeconds);
       }
+      if (carName !== undefined) {
+        this.updateWinnerText(
+          true,
+          `Winner is ${carName.name}[${timeInSeconds.toFixed(2)}]`,
+        );
+      }
 
       await winnersUI.update();
     }
   }
 
+  updateWinnerText(visible: boolean, text = ""): void {
+    const winnerText = document.querySelector<HTMLElement>(
+      ".page-winner-container .winner-text",
+    );
+    if (!winnerText) {
+      return;
+    }
+    winnerText.textContent = visible ? text : "";
+    winnerText.classList.toggle("no-active", !visible);
+  }
+
   async resetAllCars(): Promise<void> {
+    this.updateWinnerText(false);
     await Promise.all(
       this.carControllers.map((controller) => controller.reset()),
     );

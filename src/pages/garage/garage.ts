@@ -9,12 +9,13 @@ import nextPrevComponent from "../../components/next-prev.component/next-prev.co
 
 import "./garage.css";
 import infoPageComponent from "../../components/info-page.component/info-page.component.js";
+import ParagraphCreator from "../../utils/paragraph/paragraph-creator.js";
 
 const FIRST_PAGE = 1;
 
 export class Garage extends BasePage {
   private _carsContainer?: HTMLElement;
-  private _garageInfoCarContainer?: HTMLElement;
+  private _pageWinnerContainer?: HTMLElement;
 
   private get carsContainer(): HTMLElement {
     if (!this._carsContainer) {
@@ -23,11 +24,11 @@ export class Garage extends BasePage {
     return this._carsContainer;
   }
 
-  private get garageInfoCarContainer(): HTMLElement {
-    if (!this._garageInfoCarContainer) {
-      throw new Error("garageInfoCarContainer is not initialized");
+  private get pageWinnerContainer(): HTMLElement {
+    if (!this._pageWinnerContainer) {
+      throw new Error("pageWinnerContainer is not initialized");
     }
-    return this._garageInfoCarContainer;
+    return this._pageWinnerContainer;
   }
 
   private renderCars(): void {
@@ -57,9 +58,9 @@ export class Garage extends BasePage {
   }
 
   private renderInfoContainer(): void {
-    this.garageInfoCarContainer.querySelector(".info-page-container")?.remove();
+    this.pageWinnerContainer.querySelector(".info-page-container")?.remove();
 
-    this.garageInfoCarContainer.prepend(
+    this.pageWinnerContainer.prepend(
       infoPageComponent(
         "Garage",
         garageController.totalCarCount,
@@ -94,6 +95,7 @@ export class Garage extends BasePage {
   private async update(): Promise<void> {
     await garageController.loadCars();
     garageController.carControllers.length = 0;
+    garageController.updateWinnerText(false);
     this.renderInfoContainer();
     this.renderCars();
     this.updateNextPrevBtn();
@@ -137,13 +139,24 @@ export class Garage extends BasePage {
       ),
     );
 
-    this._garageInfoCarContainer = new ElementCreator({
+    const garageInfoCarContainer = new ElementCreator({
       parent: this.container,
       classes: ["garage-info-car-container"],
     }).getElement();
 
+    this._pageWinnerContainer = new ElementCreator({
+      parent: garageInfoCarContainer,
+      classes: ["page-winner-container"],
+    }).getElement();
+
+    const winnerText = new ParagraphCreator({
+      parent: this._pageWinnerContainer,
+      classes: ["winner-text"],
+    }).getElement();
+    winnerText.classList.add("no-active");
+
     this._carsContainer = new ElementCreator({
-      parent: this._garageInfoCarContainer,
+      parent: garageInfoCarContainer,
       classes: ["garage-car-container"],
     }).getElement();
 
