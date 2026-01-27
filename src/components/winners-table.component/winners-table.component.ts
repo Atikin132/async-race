@@ -63,6 +63,9 @@ export default function winnersTableComponent(
     parent: table,
   }).getElement();
 
+  const tableId = `winners-table-${Date.now()}`;
+  table.dataset.tableId = tableId;
+
   let index = page * WINNERS_PER_PAGE - PAGE_START_INDEX_OFFSET;
   for (const winner of winners) {
     const row = new TableRowCreator({
@@ -91,16 +94,6 @@ export default function winnersTableComponent(
       classes: ["tcell"],
     }).getElement();
 
-    garageController
-      .getCar(winner.id)
-      .then((carApi) => {
-        car.style.color = carApi?.color ?? "#000000";
-        carName.textContent = carApi?.name ?? "CAR_NAME";
-      })
-      .catch(() => {
-        throw new Error("Error loading car");
-      });
-
     const wins = new TableCellCreator({
       parent: row,
       classes: ["tcell"],
@@ -114,6 +107,22 @@ export default function winnersTableComponent(
     time.textContent = winner.time.toFixed(2);
 
     index += 1;
+
+    const loadCarData = async () => {
+      const currentTableId = table.dataset.tableId;
+      if (currentTableId !== tableId) {
+        return;
+      }
+
+      const carApi = await garageController.getCar(winner.id);
+
+      if (table.dataset.tableId === tableId && carApi) {
+        car.style.color = carApi.color;
+        carName.textContent = carApi.name;
+      }
+    };
+
+    void loadCarData();
   }
 
   return table;
