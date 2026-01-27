@@ -130,9 +130,8 @@ class GarageController {
     element.value = enable ? value : "";
   }
 
-  private generateCarsName(): string[] {
-    const carsNames: string[] = [];
-    const carsBrands: string[] = [
+  private getCarBrands(): string[] {
+    return [
       "Toyota",
       "Lexus",
       "Volkswagen",
@@ -149,7 +148,10 @@ class GarageController {
       "Ford",
       "Volvo",
     ];
-    const carsModels: string[] = [
+  }
+
+  private getCarModels(): string[] {
+    return [
       "Camry",
       "RX",
       "Jetta",
@@ -166,6 +168,12 @@ class GarageController {
       "Mustang",
       "XC90",
     ];
+  }
+
+  private generateCarsName(): string[] {
+    const carsNames: string[] = [];
+    const carsBrands = this.getCarBrands();
+    const carsModels = this.getCarModels();
 
     for (let i = 0; i < GENERATE_CARS_NUMBER; i += 1) {
       const brand = carsBrands[Math.floor(Math.random() * carsBrands.length)];
