@@ -6,7 +6,6 @@ import { winnersController } from "../../controllers/winners.controller.js";
 import winnersTableComponent from "../../components/winners-table.component/winners-table.component.js";
 import "./winners.css";
 
-const FIRST_PAGE = 1;
 export class Winners extends BasePage {
   private _winnersInfoTableContainer?: HTMLElement;
   private _winnersTable?: HTMLElement;
@@ -53,34 +52,15 @@ export class Winners extends BasePage {
     );
   }
 
-  private updateNextPrevBtn() {
-    const prevBtn = document.querySelector(".winners .prev-button");
-    const nextBtn = document.querySelector(".winners .next-button");
-    if (prevBtn instanceof HTMLButtonElement) {
-      if (winnersController.currentPage === FIRST_PAGE) {
-        prevBtn.classList.add("no-active");
-        prevBtn.disabled = true;
-      } else {
-        prevBtn.classList.remove("no-active");
-        prevBtn.disabled = false;
-      }
-    }
-    if (nextBtn instanceof HTMLButtonElement) {
-      if (winnersController.currentPage === winnersController.totalPages) {
-        nextBtn.classList.add("no-active");
-        nextBtn.disabled = true;
-      } else {
-        nextBtn.classList.remove("no-active");
-        nextBtn.disabled = false;
-      }
-    }
-  }
-
   async update(): Promise<void> {
     await winnersController.loadWinners();
     this.renderInfoContainer();
     this.renderTable();
-    this.updateNextPrevBtn();
+    this.updatePaginationButtons(
+      ".winners",
+      winnersController.currentPage,
+      winnersController.totalPages,
+    );
     this.updateSortIndicators();
   }
 

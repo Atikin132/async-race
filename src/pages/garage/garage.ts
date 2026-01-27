@@ -11,8 +11,6 @@ import "./garage.css";
 import infoPageComponent from "../../components/info-page.component/info-page.component.js";
 import ParagraphCreator from "../../utils/paragraph/paragraph-creator.js";
 
-const FIRST_PAGE = 1;
-
 export class Garage extends BasePage {
   private _carsContainer?: HTMLElement;
   private _pageWinnerContainer?: HTMLElement;
@@ -69,36 +67,17 @@ export class Garage extends BasePage {
     );
   }
 
-  private updateNextPrevBtn() {
-    const prevBtn = document.querySelector(".prev-button");
-    const nextBtn = document.querySelector(".next-button");
-    if (prevBtn instanceof HTMLButtonElement) {
-      if (garageController.currentPage === FIRST_PAGE) {
-        prevBtn.classList.add("no-active");
-        prevBtn.disabled = true;
-      } else {
-        prevBtn.classList.remove("no-active");
-        prevBtn.disabled = false;
-      }
-    }
-    if (nextBtn instanceof HTMLButtonElement) {
-      if (garageController.currentPage === garageController.totalPages) {
-        nextBtn.classList.add("no-active");
-        nextBtn.disabled = true;
-      } else {
-        nextBtn.classList.remove("no-active");
-        nextBtn.disabled = false;
-      }
-    }
-  }
-
   private async update(): Promise<void> {
     await garageController.loadCars();
     garageController.carControllers.length = 0;
     garageController.updateWinnerText(false);
     this.renderInfoContainer();
     this.renderCars();
-    this.updateNextPrevBtn();
+    this.updatePaginationButtons(
+      ".garage",
+      garageController.currentPage,
+      garageController.totalPages,
+    );
   }
 
   create(parent: HTMLElement): void {
