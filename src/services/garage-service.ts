@@ -44,9 +44,12 @@ function isEngineDriveResponse(obj: unknown): obj is EngineDriveResponse {
 }
 
 class GarageService {
+  private abortControllers = new Map<string, AbortController>();
+
   async getCars(
     page?: number,
     limit?: number,
+    signal?: AbortSignal,
   ): Promise<{ cars: Car[]; totalCount: number } | undefined> {
     const params = new URLSearchParams();
 
@@ -57,18 +60,37 @@ class GarageService {
       params.append("_limit", limit.toString());
     }
 
-    const response = await fetch(`${URL}/garage?${params.toString()}`);
+    const requestId = `getCars-${page}-${limit}`;
 
-    const data: unknown = await response.json();
-    if (!isCarArray(data)) {
-      return undefined;
+    this.abortControllers.get(requestId)?.abort();
+
+    const controller = new AbortController();
+    this.abortControllers.set(requestId, controller);
+
+    const finalSignal = signal || controller.signal;
+
+    try {
+      const response = await fetch(`${URL}/garage?${params.toString()}`, {
+        signal: finalSignal,
+      });
+      const data: unknown = await response.json();
+      if (!isCarArray(data)) {
+        return undefined;
+      }
+
+      const cars = data;
+
+      const totalCount = Number(response.headers.get("X-Total-Count")) || 0;
+
+      return { cars, totalCount };
+    } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        return undefined;
+      }
+      throw error;
+    } finally {
+      this.abortControllers.delete(requestId);
     }
-
-    const cars = data;
-
-    const totalCount = Number(response.headers.get("X-Total-Count")) || 0;
-
-    return { cars, totalCount };
   }
 
   async getCar(id: number): Promise<Car | undefined> {
