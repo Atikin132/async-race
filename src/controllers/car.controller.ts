@@ -1,5 +1,6 @@
 import { garageService } from "../services/garage-service.js";
 import { EngineStatus } from "../types/engine-status.enum.js";
+import { garageController } from "./garage.controller.js";
 
 export class CarController {
   private animationId: number | undefined = undefined;
@@ -26,7 +27,6 @@ export class CarController {
 
   async start(): Promise<void> {
     this.setBtnsStatus(true);
-
     const startResponse = await garageService.setEngineStatus(
       this.carId,
       EngineStatus.Started,
@@ -57,6 +57,7 @@ export class CarController {
 
   async reset(): Promise<void> {
     this.stopAnimation();
+    garageController.isRaceStart = false;
 
     await garageService.setEngineStatus(this.carId, EngineStatus.Stopped);
 

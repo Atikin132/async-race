@@ -21,6 +21,7 @@ class GarageController {
   selectedCar: Car = { name: "", color: "" };
   carControllers: CarController[] = [];
   winnerDetermined: boolean = false;
+  isRaceStart: boolean = false;
   private createInputText?: HTMLInputElement;
   private createInputColor?: HTMLInputElement;
   private updateInputText?: HTMLInputElement;
@@ -219,13 +220,14 @@ class GarageController {
 
   async startRace(): Promise<void> {
     this.winnerDetermined = false;
+    this.isRaceStart = true;
     await Promise.all(
       this.carControllers.map((controller) => controller.start()),
     );
   }
 
   async onCarFinish(carIdAPI: string, time: number) {
-    if (!garageController.winnerDetermined) {
+    if (!garageController.winnerDetermined && this.isRaceStart) {
       garageController.winnerDetermined = true;
 
       const carId = Number(carIdAPI);
