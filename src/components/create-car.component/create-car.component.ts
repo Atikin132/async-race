@@ -13,6 +13,16 @@ export default function createCarComponent(
     classes: ["create-car-component-container"],
   }).getElement();
 
+  createCarComponentContainer.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+    if (target.closest(".create-button")) {
+      void createCar();
+    }
+  });
+
   const createTitle = new ParagraphCreator({
     parent: createCarComponentContainer,
     text: "Create car",
@@ -43,12 +53,8 @@ export default function createCarComponent(
   const createButton = new ButtonCreator({
     parent: createContainer,
     classes: ["create-button", "button"],
-    text: "Create",
   }).getElement();
-
-  createButton.addEventListener("click", () => {
-    void createCar();
-  });
+  createButton.textContent = "Create";
 
   return createCarComponentContainer;
 }

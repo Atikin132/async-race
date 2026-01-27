@@ -11,35 +11,40 @@ export default function garageControlButtonsComponent(
     classes: ["garage-control-buttons-container"],
   }).getElement();
 
+  container.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+    if (target.closest(".start-race-btn")) {
+      void startRace();
+    } else if (target.closest(".reset-all-cars-btn")) {
+      void resetAllCars();
+    } else if (target.closest(".generate-cars-btn")) {
+      void generateCars();
+    }
+  });
+
   const startRaceBtn = new ButtonCreator({
     parent: container,
-    text: "Race",
     classes: ["start-race-btn", "button"],
   }).getElement();
 
-  startRaceBtn.addEventListener("click", () => {
-    void startRace();
-  });
+  startRaceBtn.textContent = "Race";
 
   const resetAllCarsBtn = new ButtonCreator({
     parent: container,
-    text: "Reset",
     classes: ["reset-all-cars-btn", "button"],
   }).getElement();
 
-  resetAllCarsBtn.addEventListener("click", () => {
-    void resetAllCars();
-  });
+  resetAllCarsBtn.textContent = "Reset";
 
   const generateCarsBtn = new ButtonCreator({
     parent: container,
-    text: "Generate Cars",
     classes: ["generate-cars-btn", "button"],
   }).getElement();
 
-  generateCarsBtn.addEventListener("click", () => {
-    void generateCars();
-  });
+  generateCarsBtn.textContent = "Generate Cars";
 
   return container;
 }

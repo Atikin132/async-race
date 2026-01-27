@@ -10,27 +10,33 @@ export default function nextPrevComponent(
     classes: ["next-prev-container"],
   }).getElement();
 
+  container.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+    if (target.closest(".prev-button")) {
+      void prevPage();
+    } else if (target.closest(".next-button")) {
+      void nextPage();
+    }
+  });
+
   const prevBtn = new ButtonCreator({
     parent: container,
     classes: ["prev-button", "no-active", "button"],
-    text: "Prev",
   }).getElement();
   prevBtn.disabled = true;
 
-  prevBtn.addEventListener("click", () => {
-    void prevPage();
-  });
+  prevBtn.textContent = "Prev";
 
   const nextBtn = new ButtonCreator({
     parent: container,
     classes: ["next-button", "no-active", "button"],
-    text: "Next",
   }).getElement();
   nextBtn.disabled = true;
 
-  nextBtn.addEventListener("click", () => {
-    void nextPage();
-  });
+  nextBtn.textContent = "Next";
 
   return container;
 }

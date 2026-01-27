@@ -13,6 +13,16 @@ export default function updateCarComponent(
     classes: ["update-car-component-container"],
   }).getElement();
 
+  updateCarComponentContainer.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+    if (target.closest(".update-button")) {
+      void updateCar();
+    }
+  });
+
   const updateTitle = new ParagraphCreator({
     parent: updateCarComponentContainer,
     text: "Update car",
@@ -45,12 +55,9 @@ export default function updateCarComponent(
   const updateButton = new ButtonCreator({
     parent: updateContainer,
     classes: ["update-button", "no-active", "button"],
-    text: "Update",
   }).getElement();
 
-  updateButton.addEventListener("click", () => {
-    void updateCar();
-  });
+  updateButton.textContent = "Update";
 
   return updateCarComponentContainer;
 }

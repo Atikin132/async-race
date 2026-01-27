@@ -22,6 +22,22 @@ export default function raceContainerComponent(
 
   raceContainerElement.dataset.id = carIdAPI;
 
+  raceContainerElement.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+    if (target.closest(".edit-btns__select")) {
+      selectCar();
+    } else if (target.closest(".edit-btns__remove")) {
+      void deleteCar(carIdAPI);
+    } else if (target.closest(".control-btns__start")) {
+      void carController.start();
+    } else if (target.closest(".control-btns__reset")) {
+      void carController.reset();
+    }
+  });
+
   const editNameContainer = new ElementCreator({
     parent: raceContainerElement,
     classes: ["edit-name-container"],
@@ -35,22 +51,14 @@ export default function raceContainerComponent(
   const select = new ButtonCreator({
     parent: editBtns,
     classes: ["edit-btns__select", "button"],
-    text: "Select",
   }).getElement();
-
-  select.addEventListener("click", () => {
-    selectCar();
-  });
+  select.textContent = "Select";
 
   const remove = new ButtonCreator({
     parent: editBtns,
     classes: ["edit-btns__remove", "button"],
-    text: "Remove",
   }).getElement();
-
-  remove.addEventListener("click", () => {
-    void deleteCar(carIdAPI);
-  });
+  remove.textContent = "Remove";
 
   const carName = new ParagraphCreator({
     parent: editNameContainer,
@@ -74,18 +82,10 @@ export default function raceContainerComponent(
     classes: ["control-btns__start", "button"],
   }).getElement();
 
-  start.addEventListener("click", () => {
-    void carController.start();
-  });
-
   const reset = new ButtonCreator({
     parent: controlBtns,
     classes: ["control-btns__reset", "no-active", "button"],
   }).getElement();
-
-  reset.addEventListener("click", () => {
-    void carController.reset();
-  });
 
   const raceRoadContainer = new ElementCreator({
     parent: trackContainer,
