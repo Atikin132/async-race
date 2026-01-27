@@ -224,7 +224,7 @@ class GarageController {
       const timeInSeconds = Number((time / MILLISECONDS_IN_SECOND).toFixed(2));
       if (winner) {
         const bestTime =
-          winner.time < timeInSeconds ? winner?.time : timeInSeconds;
+          winner.time < timeInSeconds ? winner.time : timeInSeconds;
         await winnersController.updateWinner(
           carId,
           winner.wins + ONE_WIN,
