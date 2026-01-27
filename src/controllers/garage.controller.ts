@@ -21,6 +21,25 @@ class GarageController {
   selectedCar: Car = { name: "", color: "" };
   carControllers: CarController[] = [];
   winnerDetermined: boolean = false;
+  private createInputText?: HTMLInputElement;
+  private createInputColor?: HTMLInputElement;
+  private updateInputText?: HTMLInputElement;
+  private updateInputColor?: HTMLInputElement;
+  private winnerText?: HTMLParagraphElement;
+
+  initFormElements(
+    createText: HTMLInputElement,
+    createColor: HTMLInputElement,
+    updateText: HTMLInputElement,
+    updateColor: HTMLInputElement,
+    winnerText: HTMLParagraphElement,
+  ): void {
+    this.createInputText = createText;
+    this.createInputColor = createColor;
+    this.updateInputText = updateText;
+    this.updateInputColor = updateColor;
+    this.winnerText = winnerText;
+  }
 
   async loadCars(): Promise<void> {
     const result = await garageService.getCars(this.page, CARS_PER_PAGE);
@@ -41,23 +60,14 @@ class GarageController {
   }
 
   async createCar(): Promise<void> {
-    const inputText =
-      document.querySelector<HTMLInputElement>(".create-container .input-text")
-        ?.value ?? "";
-    const inputColor =
-      document.querySelector<HTMLInputElement>(".create-container .input-color")
-        ?.value ?? "";
-
+    const inputText = this.createInputText?.value ?? "";
+    const inputColor = this.createInputColor?.value ?? "";
     await garageService.createCar(inputText, inputColor);
   }
 
   async updateCar(): Promise<void> {
-    const inputText = document.querySelector<HTMLInputElement>(
-      ".update-container .input-text",
-    );
-    const inputColor = document.querySelector<HTMLInputElement>(
-      ".update-container .input-color",
-    );
+    const inputText = this.updateInputText;
+    const inputColor = this.updateInputColor;
 
     if (this.selectedCar.id !== undefined && inputText && inputColor) {
       await garageService.updateCar(
@@ -245,14 +255,11 @@ class GarageController {
   }
 
   updateWinnerText(visible: boolean, text = ""): void {
-    const winnerText = document.querySelector<HTMLElement>(
-      ".page-winner-container .winner-text",
-    );
-    if (!winnerText) {
+    if (!this.winnerText) {
       return;
     }
-    winnerText.textContent = visible ? text : "";
-    winnerText.classList.toggle("no-active", !visible);
+    this.winnerText.textContent = visible ? text : "";
+    this.winnerText.classList.toggle("no-active", !visible);
   }
 
   async resetAllCars(): Promise<void> {

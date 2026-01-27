@@ -134,6 +134,38 @@ export class Garage extends BasePage {
     }).getElement();
     winnerText.classList.add("no-active");
 
+    const inputTextCreate =
+      garageControlContainer.querySelector<HTMLInputElement>(
+        ".create-container .input-text",
+      );
+    const inputColorCreate =
+      garageControlContainer.querySelector<HTMLInputElement>(
+        ".create-container .input-color",
+      );
+    const inputTextUpdate =
+      garageControlContainer.querySelector<HTMLInputElement>(
+        ".update-container .input-text",
+      );
+    const inputColorUpdate =
+      garageControlContainer.querySelector<HTMLInputElement>(
+        ".update-container .input-color",
+      );
+
+    if (
+      inputTextCreate &&
+      inputColorCreate &&
+      inputTextUpdate &&
+      inputColorUpdate
+    ) {
+      garageController.initFormElements(
+        inputTextCreate,
+        inputColorCreate,
+        inputTextUpdate,
+        inputColorUpdate,
+        winnerText,
+      );
+    }
+
     this._carsContainer = new ElementCreator({
       parent: garageInfoCarContainer,
       classes: ["garage-car-container"],
