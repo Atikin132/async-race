@@ -1,0 +1,43 @@
+.garage {
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.garage-control-container,
+.garage-info-car-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.garage-control-container {
+  align-items: center;
+}
+
+.page-winner-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.winner-text {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: end;
+  flex: 2;
+}
+.winner-text.no-active {
+  display: none;
+}
+
+.garage-info-car-container {
+  gap: 15px;
+}
+
+.garage-car-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}

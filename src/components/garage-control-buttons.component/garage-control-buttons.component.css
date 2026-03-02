@@ -1,0 +1,50 @@
+.garage-control-buttons-container {
+  max-width: 500px;
+  min-width: 444px;
+  width: fit-content;
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.start-race-btn,
+.reset-all-cars-btn,
+.generate-cars-btn {
+  background-color: transparent;
+  font-size: 1rem;
+  padding: 7px;
+  border-radius: 10px;
+  transition: 0.3s ease;
+  cursor: pointer;
+  flex: 1;
+}
+.start-race-btn:hover,
+.reset-all-cars-btn:hover,
+.generate-cars-btn:hover {
+  color: white;
+  border: 1px solid black;
+}
+
+.start-race-btn {
+  border: 1px solid #00ff00;
+}
+.start-race-btn:hover {
+  background-color: #00ff00;
+}
+
+.reset-all-cars-btn {
+  border: 1px solid #ff0000;
+}
+.reset-all-cars-btn:hover {
+  background-color: #ff0000;
+}
+
+.generate-cars-btn {
+  flex: 2;
+  border: 1px solid #0000ff;
+}
+.generate-cars-btn:hover {
+  background-color: #0000ff;
+}

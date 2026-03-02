@@ -1,0 +1,52 @@
+.create-car-component-container {
+  max-width: 450px;
+  min-width: 444px;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.create-title {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.create-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-text {
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid black;
+  padding: 3px 10px;
+  flex: 1;
+}
+
+.input-color {
+  background-color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.create-button {
+  background-color: transparent;
+  border: 1px solid black;
+  font-size: 1rem;
+  padding: 7px;
+  border-radius: 10px;
+  transition: 0.3s ease;
+  flex: 1;
+}
+
+.create-button:hover {
+  color: white;
+  background-color: black;
+}
