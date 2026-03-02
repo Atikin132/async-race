@@ -1,0 +1,18 @@
+.winners {
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.winners-info-table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.winners-table-container {
+  align-self: center;
+  max-width: 700px;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 10px;
+}

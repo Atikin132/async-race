@@ -1,0 +1,69 @@
+.update-car-component-container {
+  max-width: 500px;
+  min-width: 444px;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.update-title {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.update-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.update-container .input-text {
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid black;
+  padding: 3px 10px;
+  flex: 1;
+}
+.update-container .input-text.no-active {
+  background-color: rgb(180, 180, 180);
+}
+
+.update-container .input-color {
+  background-color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  flex: 1;
+}
+.update-container .input-color.no-active {
+  cursor: not-allowed;
+}
+
+.update-button {
+  color: black;
+  background-color: transparent;
+  border: 1px solid black;
+  font-size: 1rem;
+  padding: 7px;
+  border-radius: 10px;
+  transition: 0.3s ease;
+  flex: 1;
+}
+
+.update-button.no-active {
+  opacity: 30%;
+}
+
+.update-button:hover {
+  color: white;
+  background-color: black;
+}
+.update-button.no-active:hover {
+  cursor: not-allowed;
+  color: black;
+  background-color: white;
+  opacity: 30%;
+}
